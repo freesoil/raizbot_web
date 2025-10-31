@@ -94,7 +94,7 @@
       font-size:clamp(30px,4vw,52px);
       line-height:1.1; margin:0 0 14px;
       background:linear-gradient(90deg, var(--clay), var(--green));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
     }
     .hero p{color:var(--muted); font-size:1.06rem; max-width:760px; margin:0 0 26px}
     .cta-row{display:flex; gap:12px; flex-wrap:wrap}
@@ -258,17 +258,15 @@
       <div class="card">
         <div class="kicker">Founders</div>
         <h2>Experts in sustainability and robotics.</h2>
-        <p class="muted"><strong>Danilo Leao — CEO</strong><br/>Founder of BovControl; a decade digitizing agriculture with partners like Nestlé and Amazon.</p>
-        <p class="muted"><strong>Jiayuan “Jerry” Meng — CTO</strong><br/>Robotics/ML leader from Google[X] and John Deere; built autonomous systems for real-world deployment.</p>
-        <p class="muted">Met through a shared investor; based in California (Fresno & Bay Area).</p>
+        <p class="muted">Our leadership team brings decades of combined experience in sustainability, robotics, and agriculture technology.</p>
       </div>
       <div class="card" id="video" style="background:
         linear-gradient(135deg, rgba(194,168,117,.18), rgba(88,123,89,.18)),
         var(--panel)">
         <h3 style="margin-top:0">Watch our story</h3>
-        <p class="muted">One-minute founder intro. Replace the placeholder below with your video embed.</p>
+        <p class="muted">Learn more about how Raizbot is transforming carbon credit verification.</p>
         <div style="aspect-ratio:16/9; background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:var(--radius); display:flex; align-items:center; justify-content:center;">
-          <span class="muted">[ Video placeholder ]</span>
+          <span class="muted">[ Video coming soon ]</span>
         </div>
       </div>
     </div>
@@ -281,19 +279,19 @@
         <div class="kicker">Get in touch</div>
         <h2>Let’s rebuild trust in carbon markets.</h2>
         <p class="muted">If you’re a rancher, investor, or project developer, we’d love to connect.</p>
-        <p class="muted">Email: <a class="email" href="mailto:info@raizbot.ai">info@raizbot.ai</a></p>
+        <p class="muted">Email: <a class="email" href="mailto:dan@raizbot.ai">dan@raizbot.ai</a></p>
         <div class="cta-row" style="margin-top:8px">
-          <a class="btn primary" href="mailto:info@raizbot.ai?subject=Pilot%20Interest%20—%20Raizbot">Join Our Pilot Program</a>
+          <a class="btn primary" href="mailto:dan@raizbot.ai?subject=Pilot%20Interest%20—%20Raizbot">Join Our Pilot Program</a>
           <a class="btn" href="#technology">See the Tech</a>
         </div>
       </div>
-      <form class="card" onsubmit="event.preventDefault(); alert('Thanks! We will reach out shortly.');">
+      <form class="card" id="contact-form">
         <h3 style="margin-top:0">Quick message</h3>
-        <p class="muted">Static demo form — integrate with your email or CRM later.</p>
+        <p class="muted">Send us a message and we'll get back to you soon.</p>
         <div style="display:grid; gap:10px">
-          <input required type="text" placeholder="Your name" style="padding:12px; border-radius:10px; border:1px solid var(--line); background:var(--panel); color:var(--text)">
-          <input required type="email" placeholder="you@company.com" style="padding:12px; border-radius:10px; border:1px solid var(--line); background:var(--panel); color:var(--text)">
-          <textarea required rows="4" placeholder="Tell us briefly about your project…" style="padding:12px; border-radius:10px; border:1px solid var(--line); background:var(--panel); color:var(--text)"></textarea>
+          <input required type="text" name="name" placeholder="Your name" style="padding:12px; border-radius:10px; border:1px solid var(--line); background:var(--panel); color:var(--text)">
+          <input required type="email" name="email" placeholder="you@company.com" style="padding:12px; border-radius:10px; border:1px solid var(--line); background:var(--panel); color:var(--text)">
+          <textarea required name="message" rows="4" placeholder="Tell us briefly about your project…" style="padding:12px; border-radius:10px; border:1px solid var(--line); background:var(--panel); color:var(--text)"></textarea>
           <button class="btn primary" type="submit">Send</button>
         </div>
       </form>
@@ -310,5 +308,18 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const name = formData.get('name');
+      const email = formData.get('email');
+      const message = formData.get('message');
+      const subject = encodeURIComponent('Contact from Raizbot Website');
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+      window.location.href = `mailto:dan@raizbot.ai?subject=${subject}&body=${body}`;
+    });
+  </script>
 </body>
 </html>
