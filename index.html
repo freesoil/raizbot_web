@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Raizbot — AI robots verifying carbon credits</title>
+  <meta name="description" content="Raizbot builds autonomous robots to make carbon credits transparent, trusted, and verifiable for ranches and land stewards." />
+
+  <style>
+    /* ================= Regenerative Earth Palette =================
+       Dark Soil   #3A2F28  (primary background)
+       Clay        #C2A875  (warm highlight)
+       Field Green #587B59  (CTA / accents)
+       Sky Mist    #DCE6E0  (soft neutral)
+       Off-White   #F5F5F3  (text on dark)
+    ================================================================= */
+    :root{
+      --soil:#3A2F28;           /* base */
+      --soil-deeper:#2F261F;    /* deeper base for footer */
+      --panel:#3F342D;          /* card panel */
+      --text:#F5F5F3;           /* off-white */
+      --muted:#D8D1CA;          /* softened text */
+      --green:#587B59;          /* field green */
+      --clay:#C2A875;           /* clay accent */
+      --mist:#DCE6E0;           /* sky mist */
+      --line:rgba(245,245,243,.14);
+      --radius:14px;
+      --maxw:1120px;
+      --shadow:0 10px 24px rgba(0,0,0,.25);
+    }
+
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 10% -15%, rgba(194,168,117,.12), transparent 60%),
+        linear-gradient(180deg, var(--soil) 0%, var(--soil-deeper) 100%);
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      line-height:1.6;
+    }
+    a{color:var(--text); text-decoration:none}
+    .wrap{max-width:var(--maxw); margin:auto; padding:0 20px}
+
+    /* ---------------- Header ---------------- */
+    header{
+      position:sticky; top:0; z-index:40;
+      background:rgba(58,47,40,.9);
+      backdrop-filter:saturate(140%) blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{display:flex; align-items:center; justify-content:space-between; height:64px}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px}
+    .brand .dot{width:10px; height:10px; border-radius:50%; background:var(--green); box-shadow:0 0 14px rgba(88,123,89,.9)}
+    .nav a.btn{padding:10px 16px; border-radius:10px; transition:.25s}
+    .nav a.btn:hover{background:rgba(255,255,255,.06)}
+    .nav a.btn.cta{
+      font-weight:700; color:#0c140d;
+      background:linear-gradient(90deg, var(--green), var(--clay));
+      box-shadow:0 0 18px rgba(194,168,117,.28);
+    }
+
+    /* ---------------- Hero ---------------- */
+    .hero{
+      position:relative;
+      padding:104px 0 84px;
+      border-bottom:1px solid var(--line);
+      /* pastoral ranch landscape (Unsplash - free use). Swap if you prefer your own. */
+      background:
+        linear-gradient(180deg, rgba(58,47,40,.82), rgba(58,47,40,.75)),
+        url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+    }
+    /* Subtle contour line overlay for surveying vibes */
+    .hero::after{
+      content:"";
+      position:absolute; inset:0;
+      background-image:
+        radial-gradient(100% 60% at 80% 0%, rgba(194,168,117,.10), transparent 60%),
+        url('data:image/svg+xml;utf8, \
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox=\"0 0 800 400\" preserveAspectRatio=\"none\"> \
+          <defs><linearGradient id=\"g\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"> \
+            <stop offset=\"0%\" stop-color=\"%23ffffff\" stop-opacity=\"0.08\"/> \
+            <stop offset=\"100%\" stop-color=\"%23ffffff\" stop-opacity=\"0\"/> \
+          </linearGradient></defs> \
+          <path d=\"M0,120 C120,100 200,160 320,140 C440,120 560,180 680,160 L800,150\" stroke=\"url(%23g)\" stroke-width=\"1\" fill=\"none\"/> \
+          <path d=\"M0,200 C120,180 200,240 320,220 C440,200 560,260 680,240 L800,230\" stroke=\"url(%23g)\" stroke-width=\"1\" fill=\"none\"/> \
+          <path d=\"M0,280 C120,260 200,320 320,300 C440,280 560,340 680,320 L800,310\" stroke=\"url(%23g)\" stroke-width=\"1\" fill=\"none\"/> \
+        </svg>');
+      background-repeat:no-repeat, no-repeat;
+      background-size:cover, cover;
+      pointer-events:none;
+    }
+    .hero h1{
+      font-size:clamp(30px,4vw,52px);
+      line-height:1.1; margin:0 0 14px;
+      background:linear-gradient(90deg, var(--clay), var(--green));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    }
+    .hero p{color:var(--muted); font-size:1.06rem; max-width:760px; margin:0 0 26px}
+    .cta-row{display:flex; gap:12px; flex-wrap:wrap}
+    .btn{
+      display:inline-flex; align-items:center; padding:12px 18px; border-radius:12px;
+      border:1px solid var(--line); background:rgba(255,255,255,.04); font-weight:600; transition:.2s
+    }
+    .btn.primary{border:none; color:#0f160f; background:linear-gradient(90deg, var(--green), var(--clay))}
+    .btn:hover{transform:translateY(-1px); box-shadow:var(--shadow)}
+
+    /* ---------------- Sections ---------------- */
+    section{padding:72px 0; border-bottom:1px solid var(--line)}
+    h2{font-size:clamp(22px,3vw,34px); margin:0 0 12px}
+    .grid{display:grid; gap:20px}
+    @media(min-width:900px){ .grid.two{grid-template-columns:1fr 1fr} .grid.three{grid-template-columns:repeat(3,1fr)} }
+    .card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:0 4px 10px rgba(0,0,0,.18);
+    }
+    .kicker{color:var(--clay); text-transform:uppercase; letter-spacing:.15em; font-size:12px; margin-bottom:10px}
+    .muted{color:var(--muted)}
+
+    /* ---------------- Soil/Roots Divider Slice ---------------- */
+    .slice{
+      padding:56px 0;
+      border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(63,52,45,.94), rgba(47,38,31,.92)),
+        url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat; /* soil/roots texture */
+    }
+    .slice .card{background:rgba(63,52,45,.65)}
+
+    /* ---------------- Table ---------------- */
+    table{width:100%; border-collapse:collapse; border-radius:var(--radius); overflow:hidden}
+    th,td{padding:12px 14px; text-align:left; border-bottom:1px solid var(--line)}
+    th{color:var(--muted); font-weight:600; background:rgba(255,255,255,.03)}
+
+    /* ---------------- Footer ---------------- */
+    footer{background:var(--soil-deeper); padding:40px 0; color:var(--muted)}
+    .foot-row{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; border-top:1px solid var(--line); padding-top:20px}
+    .badge{border:1px solid var(--line); border-radius:10px; padding:8px 10px; font-size:12px}
+    .email{color:var(--text); border-bottom:1px dashed var(--line)}
+  </style>
+</head>
+
+<body>
+  <!-- ================= NAV ================= -->
+  <header>
+    <div class="wrap nav">
+      <div class="brand"><span class="dot"></span> Raizbot</div>
+      <nav>
+        <a class="btn" href="#problem">Problem</a>
+        <a class="btn" href="#technology">Technology</a>
+        <a class="btn" href="#founders">Founders</a>
+        <a class="btn" href="#contact">Contact</a>
+        <a class="btn cta" href="#video">Watch Our Story</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="home">
+    <div class="wrap">
+      <div class="kicker">Ranch • Soil • Robotics</div>
+      <h1>AI robots verifying carbon credits with trust and precision.</h1>
+      <p>Billions meant for climate action fail to reduce emissions because credits are opaque, untrusted, and often unverifiable. Ranchers are among the largest natural sinks—but without continuous, trusted measurement, their real carbon value is ignored or discounted. Raizbot changes that with verifiable data from the ground up.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#contact">Partner With Us</a>
+        <a class="btn" href="#video">Watch Our Story</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROBLEM / SOLUTION ============ -->
+  <section id="problem">
+    <div class="wrap grid two">
+      <div class="card">
+        <div class="kicker">Problem</div>
+        <h2>The carbon market is broken.</h2>
+        <p class="muted">Credits rely on infrequent surveys and coarse estimates. Funds intended to cut emissions miss the mark. Land stewards lose recognition for real sequestration.</p>
+      </div>
+      <div class="card">
+        <div class="kicker">Solution</div>
+        <h2>Continuous, verifiable field data.</h2>
+        <p class="muted">Raizbot deploys autonomous ground and aerial robots to measure soil carbon and vegetation health in real time. Every reading is immutably tagged with location, method, and system health—restoring trust and making credits tradable.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ROOTS SLICE (visual) ============ -->
+  <div class="slice">
+    <div class="wrap">
+      <div class="card">
+        <h2 style="margin-top:0">From roots to registries</h2>
+        <p class="muted" style="margin:0">We connect underground measurements and above-ground growth to audit-grade reports ready for verification frameworks.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TECHNOLOGY ============ -->
+  <section id="technology">
+    <div class="wrap">
+      <div class="kicker">Technology</div>
+      <h2>Physical AI built for the field.</h2>
+      <div class="grid two">
+        <div class="card">
+          <h3>Deep soil sampling</h3>
+          <p class="muted">Autonomous coring with RTK positioning and adaptive force control ensures reliable depth across varied soils.</p>
+          <ul class="muted">
+            <li>ROS2 edge control on NVIDIA Orin/Xavier</li>
+            <li>Real-time obstruction detection</li>
+            <li>Closed-loop motor control</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Vision-based biomass tracking</h3>
+          <p class="muted">RGB/multispectral imaging analyzed by efficient neural backbones quantifies vegetation growth and above-ground carbon.</p>
+          <ul class="muted">
+            <li>Context-aware inference</li>
+            <li>On-device + cloud analytics</li>
+            <li>Uncertainty-aware estimates</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Health & provenance</h3>
+          <p class="muted">Pre-sample checks and anomaly detection; each measurement cryptographically logged with full provenance.</p>
+        </div>
+        <div class="card">
+          <h3>From measurements to markets</h3>
+          <p class="muted">Standardized outputs map cleanly to verification frameworks—turning measured impact into trusted credits.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHY RAIZBOT ============ -->
+  <section id="why">
+    <div class="wrap">
+      <div class="kicker">Why Raizbot</div>
+      <h2>Turning opacity into trust.</h2>
+      <div class="card">
+        <table>
+          <thead><tr><th>Capability</th><th>Raizbot</th><th>Typical tools</th></tr></thead>
+          <tbody>
+            <tr><td>Continuous field measurement</td><td>✓</td><td>✗</td></tr>
+            <tr><td>Full provenance logging</td><td>✓</td><td>Partial</td></tr>
+            <tr><td>Deep soil + aerial coverage</td><td>✓</td><td>Limited</td></tr>
+            <tr><td>Registry-ready reports</td><td>✓</td><td>✗</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOUNDERS ============ -->
+  <section id="founders">
+    <div class="wrap grid two">
+      <div class="card">
+        <div class="kicker">Founders</div>
+        <h2>Experts in sustainability and robotics.</h2>
+        <p class="muted"><strong>Danilo Leao — CEO</strong><br/>Founder of BovControl; a decade digitizing agriculture with partners like Nestlé and Amazon.</p>
+        <p class="muted"><strong>Jiayuan “Jerry” Meng — CTO</strong><br/>Robotics/ML leader from Google[X] and John Deere; built autonomous systems for real-world deployment.</p>
+        <p class="muted">Met through a shared investor; based in California (Fresno & Bay Area).</p>
+      </div>
+      <div class="card" id="video" style="background:
+        linear-gradient(135deg, rgba(194,168,117,.18), rgba(88,123,89,.18)),
+        var(--panel)">
+        <h3 style="margin-top:0">Watch our story</h3>
+        <p class="muted">One-minute founder intro. Replace the placeholder below with your video embed.</p>
+        <div style="aspect-ratio:16/9; background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:var(--radius); display:flex; align-items:center; justify-content:center;">
+          <span class="muted">[ Video placeholder ]</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact">
+    <div class="wrap grid two">
+      <div>
+        <div class="kicker">Get in touch</div>
+        <h2>Let’s rebuild trust in carbon markets.</h2>
+        <p class="muted">If you’re a rancher, investor, or project developer, we’d love to connect.</p>
+        <p class="muted">Email: <a class="email" href="mailto:info@raizbot.ai">info@raizbot.ai</a></p>
+        <div class="cta-row" style="margin-top:8px">
+          <a class="btn primary" href="mailto:info@raizbot.ai?subject=Pilot%20Interest%20—%20Raizbot">Join Our Pilot Program</a>
+          <a class="btn" href="#technology">See the Tech</a>
+        </div>
+      </div>
+      <form class="card" onsubmit="event.preventDefault(); alert('Thanks! We will reach out shortly.');">
+        <h3 style="margin-top:0">Quick message</h3>
+        <p class="muted">Static demo form — integrate with your email or CRM later.</p>
+        <div style="display:grid; gap:10px">
+          <input required type="text" placeholder="Your name" style="padding:12px; border-radius:10px; border:1px solid var(--line); background:var(--panel); color:var(--text)">
+          <input required type="email" placeholder="you@company.com" style="padding:12px; border-radius:10px; border:1px solid var(--line); background:var(--panel); color:var(--text)">
+          <textarea required rows="4" placeholder="Tell us briefly about your project…" style="padding:12px; border-radius:10px; border:1px solid var(--line); background:var(--panel); color:var(--text)"></textarea>
+          <button class="btn primary" type="submit">Send</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-row">
+        <div class="brand"><span class="dot"></span> Raizbot</div>
+        <div class="badge">Roots • Robotics • Real Impact</div>
+        <div class="muted">© 2025 Raizbot</div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
